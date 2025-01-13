@@ -2,10 +2,12 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Noto_Sans_JP } from "next/font/google";
 
-const notoSandsJP = Noto_Sans_JP({
+const notoSansJP = Noto_Sans_JP({
   subsets: ["latin"],
   weight: ["400", "500", "700"],
   preload: true,
+  display: "swap",
+  adjustFontFallback: false
 });
 
 //MetaデータについてはSite.tsしてきりだす
@@ -21,7 +23,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${notoSandsJP.className} antialiased`}>{children}</body>
+      <body className={`${notoSansJP.className} antialiased`}>{children}</body>
     </html>
   );
 }
