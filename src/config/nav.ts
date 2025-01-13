@@ -4,7 +4,7 @@ import { Image, ImageDown, Layout, LayoutDashboard, Settings } from "lucide-reac
 export const navItems:NavItem[]  = [
     {
         title: "ダッシュボード",
-        href: "/dashboad",
+        href: "/dashboard",
         icon: LayoutDashboard
     },
     {
