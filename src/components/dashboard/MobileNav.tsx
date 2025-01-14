@@ -25,8 +25,10 @@ const MobileNav = () => {
       <SheetContent side={"left"} className="pl-1 pr-0">
         <SheetHeader className="py-3 text-left px-10">
           <SheetTitle>メニュー</SheetTitle>
-          <SheetDescription className="px-7">
-            <DashboadNav />
+          <SheetDescription>
+            <div className="px-7">
+              <DashboadNav />
+            </div>
           </SheetDescription>
         </SheetHeader>
       </SheetContent>
