@@ -1,4 +1,4 @@
-import MobileNav from "@/components/dashboard/MobileNav";
+import MobileNav from "@/components/dashboard/mobile-nav";
 import DashboadNav from "@/components/dashboard/nav";
 import Link from "next/link";
 

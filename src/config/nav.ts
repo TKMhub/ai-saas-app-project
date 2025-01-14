@@ -20,17 +20,17 @@ export const navItems: NavItem[] = [
   },
   {
     title: "背景削除",
-    href: "/dashboad/tools/remove-bg",
+    href: "/dashboard/tools/remove-bg",
     icon: Layout,
   },
   {
     title: "画像圧縮",
-    href: "/dashboad/tools/optimize",
+    href: "/dashboard/tools/optimize",
     icon: ImageDown,
   },
   {
     title: "画像設定",
-    href: "/dashboad/setting",
+    href: "/dashboard/setting",
     icon: Settings,
   },
 ];

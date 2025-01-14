@@ -1,6 +1,7 @@
+import PageContainer from "@/components/dashboard/page-container";
+
 const DashboadPage = () => {
-  return <div>page</div>;
-  const aaa = 'a';
+  return <PageContainer>page</PageContainer>;
 };
 
 export default DashboadPage;
