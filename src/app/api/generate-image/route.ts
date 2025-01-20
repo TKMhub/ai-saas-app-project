@@ -5,7 +5,7 @@ import FormData from "form-data";
 
 export async function POST(req: Request) {
   const { keyword } = await req.json();
-  console.log(keyword);
+
   try {
     //API##############################################################
     //https://platform.stability.ai/docs/api-reference#tag/Generate/paths/~1v2beta~1stable-image~1generate~1ultra/post
@@ -35,8 +35,12 @@ export async function POST(req: Request) {
     if (response.status !== 200) {
       throw new Error(`API error: ${response.status}`);
     }
-    console.log(response.data);
-    return NextResponse.json(response.data);
+
+    //Base64エンコーディング
+    const base64Image = Buffer.from(response.data).toString("base64");
+    const imageUrl = `data:image/png;base64,${base64Image}`;
+
+    return NextResponse.json({ imageUrl });
     //API##############################################################
   } catch (error) {
     console.error("error generate image", error);
