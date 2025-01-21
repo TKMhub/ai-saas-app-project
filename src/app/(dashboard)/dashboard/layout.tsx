@@ -1,5 +1,6 @@
 import MobileNav from "@/components/dashboard/mobile-nav";
 import DashboadNav from "@/components/dashboard/nav";
+import { Toaster } from "@/components/ui/toaster";
 import Link from "next/link";
 
 export default function DashboardLayout({
@@ -34,6 +35,7 @@ export default function DashboardLayout({
           </main>
         </div>
       </div>
+      <Toaster />
     </div>
   );
 }

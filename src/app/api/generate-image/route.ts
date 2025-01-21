@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import fs from "node:fs";
 import axios from "axios";
 import FormData from "form-data";
+import sharp from "sharp";
 
 export async function POST(req: Request) {
   const { keyword } = await req.json();
@@ -36,8 +37,14 @@ export async function POST(req: Request) {
       throw new Error(`API error: ${response.status}`);
     }
 
+    //画像の最適化
+    const optimazedImage = await sharp(response.data)
+      .resize(1280, 720) //サイゼ調整
+      .png({ quality: 80, compressionLevel: 9 }) //圧縮レベルMax
+      .toBuffer();
+
     //Base64エンコーディング
-    const base64Image = Buffer.from(response.data).toString("base64");
+    const base64Image = optimazedImage.toString("base64");
     const imageUrl = `data:image/png;base64,${base64Image}`;
 
     return NextResponse.json({ imageUrl });
