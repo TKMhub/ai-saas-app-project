@@ -12,7 +12,7 @@ export async function POST(req: Request) {
     //API##############################################################
     const payload = {
       //どんな画像？
-      prompt: "Lighthouse on a cliff overlooking the ocean",
+      prompt: `Create Image with ${keyword}`,
       //画像形式は？
       output_format: "png",
     };
