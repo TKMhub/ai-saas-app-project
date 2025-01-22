@@ -101,7 +101,7 @@ const ImageGenerator = () => {
           </div>
           <Button
             className="w-full"
-            variant={"secondary"}
+            variant={"outline"}
             onClick={handleDownload}
           >
             <Download className="mr-2" />
