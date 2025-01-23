@@ -32,7 +32,7 @@ const BackgroundRemover = () => {
 
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement("a");
-      link.download = `${state.keyword}.png`;
+      link.download = `${state.processedImage}.png`;
 
       document.body.appendChild(link);
       link.click();
@@ -90,12 +90,12 @@ const BackgroundRemover = () => {
         </form>
       </div>
       {/* image preview */}
-      {state.imageUrl && (
+      {state.processedImage && (
         <div className="space-y-4">
           <div className="overflow-hidden rounded-lg border bg-background">
             <div className="aspect-video relative">
               <img
-                src={state.imageUrl}
+                src={state.processedImage}
                 alt="Generated Image"
                 className="w-full h-full object-cover"
               />

@@ -18,17 +18,23 @@ export async function POST(req: Request) {
   const bytes = await file.arrayBuffer();
   const buffer = Buffer.from(bytes);
 
+  //画像の最適化
+  const optimazedInput = await sharp(buffer)
+    .resize(1280, 720) //サイゼ調整
+    .png({ quality: 80, compressionLevel: 9 }) //圧縮レベルMax
+    .toBuffer();
+
   try {
     const formData = new FormData();
-    formData.append("image", buffer, {
+    formData.append("image", optimazedInput, {
       filename: "image.png",
       contentType: "image/png",
     });
 
     formData.append("output_format", "png");
 
-    const response = await axios.postForm(
-      `https://api.stability.ai/v2beta/stable-image/generate/core`,
+    const response = await axios.post(
+      `https://api.stability.ai/v2beta/stable-image/edit/remove-background`,
       formData,
       {
         validateStatus: undefined,
