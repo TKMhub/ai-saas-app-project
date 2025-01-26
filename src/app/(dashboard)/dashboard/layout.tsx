@@ -19,7 +19,9 @@ export default function DashboardLayout({
             <Link href="/">
               <h1 className="text-lg font-bold">AI Image Generator</h1>
             </Link>
-            <AuthButton />
+            <div className="ml-auto">
+              <AuthButton />
+            </div>
           </div>
         </div>
       </header>
