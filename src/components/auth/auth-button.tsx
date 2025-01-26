@@ -5,10 +5,18 @@ import { Button } from "../ui/button";
 const AuthButton = () => {
   return (
     <div className="flex items-center gap-4">
-      <SignInButton>
+      <SignInButton
+        mode="modal"
+        fallbackRedirectUrl={"/dashboard"}
+        forceRedirectUrl={"/dashboard"}
+      >
         <Button variant={"ghost"}>ログイン</Button>
       </SignInButton>
-      <SignUpButton>
+      <SignUpButton
+        mode="modal"
+        fallbackRedirectUrl={"/dashboard"}
+        forceRedirectUrl={"/dashboard"}
+      >
         <Button variant={"secondary"}>新規登録</Button>
       </SignUpButton>
     </div>
