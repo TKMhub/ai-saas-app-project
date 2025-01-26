@@ -1,8 +1,22 @@
-import { SignInButton, SignUpButton } from "@clerk/nextjs";
+import { SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
 import React from "react";
 import { Button } from "../ui/button";
+import { auth } from "@clerk/nextjs/server";
 
-const AuthButton = () => {
+const AuthButton = async () => {
+  const { userId } = await auth();
+
+  if (userId) {
+    return (
+      <UserButton
+        appearance={{
+          elements: {
+            avatarBox: "h-10 w-10",
+          },
+        }}
+      />
+    );
+  }
   return (
     <div className="flex items-center gap-4">
       <SignInButton
