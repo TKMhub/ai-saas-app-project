@@ -4,6 +4,7 @@ import { Button } from "../ui/button";
 import { navItems } from "@/config/nav";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import AuthButton from "../auth/auth-button";
 
 const DashboadNav = () => {
   const pathname = usePathname();
@@ -22,6 +23,9 @@ const DashboadNav = () => {
           </Link>
         </Button>
       ))}
+      <div className="my-4 px-4 md:hidden">
+        <AuthButton />
+      </div>
     </nav>
   );
 };

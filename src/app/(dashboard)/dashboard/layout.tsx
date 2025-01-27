@@ -15,7 +15,7 @@ export default function DashboardLayout({
       <header className="sticky top-0 z-40 border-b bg-background">
         <div className="container flex items-center h-16 px-4">
           <MobileNav />
-          <div className="flex w-full">
+          <div className="flex w-full items-center">
             <Link href="/">
               <h1 className="text-lg font-bold">AI Image Generator</h1>
             </Link>
