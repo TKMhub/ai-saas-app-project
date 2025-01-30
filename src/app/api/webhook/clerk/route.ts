@@ -1,6 +1,8 @@
 import { Webhook } from "svix";
 import { headers } from "next/headers";
 import { WebhookEvent } from "@clerk/nextjs/server";
+import { NextResponse } from "next/server";
+import { createUser, deleteUser, updateUser } from "@/lib/users";
 
 export async function POST(req: Request) {
   const SIGNING_SECRET = process.env.SIGNING_SECRET;
@@ -55,7 +57,49 @@ export async function POST(req: Request) {
   // console.log("Webhook payload:", body);
   //↓
   if (evt.type === "user.created") {
-    console.log("userId:", evt.data.id);
+    // 分割代入
+    const { id, email_addresses } = evt.data;
+
+    const email = email_addresses[0].email_address;
+
+    try {
+      const user = await createUser(id, email);
+
+      return NextResponse.json({ user }, { status: 201 });
+    } catch (error) {
+      return NextResponse.json({ error }, { status: 500 });
+    }
+  }
+  if (evt.type === "user.updated") {
+    // 分割代入
+    const { id, email_addresses } = evt.data;
+
+    const email = email_addresses[0].email_address;
+
+    try {
+      const user = await updateUser(id, email);
+
+      return NextResponse.json({ user }, { status: 200 });
+    } catch (error) {
+      return NextResponse.json({ error }, { status: 500 });
+    }
+  }
+
+  if (evt.type === "user.deleted") {
+    // 分割代入
+    const { id } = evt.data;
+
+    if (!id) {
+      throw new Error("Failed to delete user Table");
+    }
+
+    try {
+      const user = await deleteUser(id);
+
+      return NextResponse.json({ user }, { status: 200 });
+    } catch (error) {
+      return NextResponse.json({ error }, { status: 500 });
+    }
   }
 
   return new Response("Webhook received", { status: 200 });
