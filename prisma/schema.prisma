@@ -1,3 +1,6 @@
+// https://www.prisma.io/docs/orm/prisma-migrate/getting-started
+// マイグレーション・・・prisma migrate dev --name initstrict
+
 generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["driverAdapters"]
