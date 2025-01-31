@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
 const NavItems = () => {
   const pathname = usePathname();
   return (
-    <div>
+    <>
       {navItems.map((item) => (
         <Button
           key={item.href}
@@ -23,7 +23,7 @@ const NavItems = () => {
           </Link>
         </Button>
       ))}
-    </div>
+    </>
   );
 };
 

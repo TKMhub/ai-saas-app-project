@@ -7,7 +7,7 @@ const Creditdisplay = async () => {
       <div className="text-sm font-medium text-muted-foreground">
         残りクレジット
       </div>
-      <div className="mt-2 font-bold1">5コイン</div>
+      <div className="mt-2 font-bold1">{credits}コイン</div>
     </div>
   );
 };
