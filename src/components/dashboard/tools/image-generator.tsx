@@ -9,11 +9,14 @@ import { useActionState } from "react";
 import { cn } from "@/lib/utils";
 import LoadingSpinner from "../loading-spinner";
 import { toast } from "@/hooks/use-toast";
+import { SignInButton, useUser } from "@clerk/nextjs";
 
 const initialState: GenerateImageState = {
   status: "idle",
 };
 const ImageGenerator = () => {
+  const { isSignedIn } = useUser();
+
   // useActionStateはペンディング状態も取得することができる・・・第三の引数
   const [state, formAction, pending] = useActionState(
     generateImage,
@@ -68,23 +71,33 @@ const ImageGenerator = () => {
               required //入力チェック
             />
           </div>
-          {/* submit button　※pendingがtrueの時にボタンを押せなくする */}
-          <Button
-            type="submit"
-            disabled={pending}
-            className={cn("w-full duration-200", pending && "bg-primary/80")}
-          >
-            {pending ? (
-              <LoadingSpinner />
-            ) : (
-              <>
-                {" "}
+          {/* ユーザーがログインしていなない場合のっ制御 */}
+          {isSignedIn ? (
+            <Button
+              type="submit"
+              disabled={pending}
+              className={cn("w-full duration-200", pending && "bg-primary/80")}
+            >
+              {/* submit button　※pendingがtrueの時にボタンを押せなくする */}
+              {pending ? (
+                <LoadingSpinner />
+              ) : (
+                <>
+                  {" "}
+                  <ImageIcon className="mr-2" />
+                  画像を生成
+                </>
+              )}
+              画像を生成する
+            </Button>
+          ) : (
+            <SignInButton mode="modal">
+              <Button className="w-full">
                 <ImageIcon className="mr-2" />
-                画像を生成
-              </>
-            )}
-            画像を生成する
-          </Button>
+                ログインして画像を生成
+              </Button>
+            </SignInButton>
+          )}
         </form>
       </div>
       {/* image preview */}

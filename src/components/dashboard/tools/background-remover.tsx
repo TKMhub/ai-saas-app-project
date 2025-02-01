@@ -4,16 +4,18 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { GenerateImageState } from "@/types/actions";
-import { Download, Layers } from "lucide-react";
+import { Download, ImageIcon, Layers } from "lucide-react";
 import { useActionState } from "react";
 import { cn } from "@/lib/utils";
 import LoadingSpinner from "../loading-spinner";
 import { toast } from "@/hooks/use-toast";
+import { SignInButton, useUser } from "@clerk/nextjs";
 
 const initialState: GenerateImageState = {
   status: "idle",
 };
 const BackgroundRemover = () => {
+  const { isSignedIn } = useUser();
   // useActionStateはペンディング状態も取得することができる・・・第三の引数
   const [state, formAction, pending] = useActionState(
     removeBackground,
@@ -70,23 +72,32 @@ const BackgroundRemover = () => {
               required //入力チェック
             />
           </div>
-          {/* submit button　※pendingがtrueの時にボタンを押せなくする */}
-          <Button
-            type="submit"
-            disabled={pending}
-            className={cn("w-full duration-200", pending && "bg-primary/80")}
-          >
-            {pending ? (
-              <LoadingSpinner />
-            ) : (
-              <>
-                {" "}
-                <Layers className="mr-2" />
-                背景を削除
-              </>
-            )}
-            画像を生成する
-          </Button>
+          {/* ユーザーがログインしていなない場合のっ制御 */}
+          {isSignedIn ? (
+            <Button
+              type="submit"
+              disabled={pending}
+              className={cn("w-full duration-200", pending && "bg-primary/80")}
+            >
+              {pending ? (
+                <LoadingSpinner />
+              ) : (
+                <>
+                  {" "}
+                  <Layers className="mr-2" />
+                  背景を削除
+                </>
+              )}
+              画像を生成する
+            </Button>
+          ) : (
+            <SignInButton mode="modal">
+              <Button className="w-full">
+                <ImageIcon className="mr-2" />
+                ログインして背景を削除
+              </Button>
+            </SignInButton>
+          )}
         </form>
       </div>
       {/* image preview */}

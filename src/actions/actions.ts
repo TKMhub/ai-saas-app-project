@@ -74,8 +74,20 @@ export async function removeBackground(
   state: RemoveBackgroundState, //利用なし
   formData: FormData
 ): Promise<RemoveBackgroundState> {
-  const image = formData.get("image") as File;
+  const user = await currentUser();
+  //ユーザーチャック
+  if (!user) {
+    throw new Error("認証が必要です。");
+  }
 
+  const credits = await getUserCredits();
+  //クレジットチェック
+  if (credits === null || credits < 1) {
+    //?以降についてはクレジット残高が足りない旨の情報を付属
+    redirect("/dashboard/plan?reason=insufficient_credits");
+  }
+
+  const image = formData.get("image") as File;
   if (!image) {
     return {
       status: "error",
@@ -96,6 +108,10 @@ export async function removeBackground(
     }
 
     const data = await response.json();
+
+    //利用時にクレジットをg減少させる
+    await decrementUserCredits(user.id);
+    revalidatePath("/dashboard");
 
     return {
       status: "success",
