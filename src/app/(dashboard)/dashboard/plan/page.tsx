@@ -18,12 +18,20 @@ const Plan = () => {
             const Icon = plan.icon;
 
             return (
+              //動的TailwindCSS
               <div
                 key={plan.name}
-                className="border rounded-xl bg-card p-8 shadow-sm flex flex-col"
+                className={`border rounded-xl bg-card p-8 shadow-sm flex flex-col ${
+                  plan.popular ? "ring-2 ring-primary scale-105" : ""
+                }`}
               >
-                <div className="space-y-6">
+                <div className="space-y-6 flex-1">
                   <div className="space-y-4">
+                    {plan.popular && (
+                      <div className="rounded-full bg-primary/10 px-3 py-1 text-sm text-primary w-fit">
+                        人気プラン
+                      </div>
+                    )}
                     <div className="flex items-center gap-2">
                       <Icon className="size-6 text-primary" />
                       <h2 className="text-2xl font-bold">{plan.name}</h2>
@@ -47,7 +55,7 @@ const Plan = () => {
                   <Button
                     className="w-full mt-8"
                     size={"lg"}
-                    variant={"outline"}
+                    variant={plan.popular ? "default" : "outline"}
                     type="submit"
                   >
                     {plan.buttonText}

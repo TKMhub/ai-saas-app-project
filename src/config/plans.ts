@@ -18,6 +18,7 @@ export const plans = [
     description: "プロフェショナルな制作に有効なプラン",
     features: ["月100クレジット付与", "優先サポート", "商用利用可能"],
     buttonText: "Proプランを選択",
+    popular: true,
     priceId: "price_xxx",
   },
   {

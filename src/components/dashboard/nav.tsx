@@ -17,6 +17,9 @@ const DashboadNav = () => {
       </div>
       <div className="p-4">
         <Creditdisplay />
+        <Button className="w-full mt-4" variant={"premium"}>
+          <Link href={"/dashboard/plan"}>アップグレード</Link>
+        </Button>
       </div>
     </nav>
   );
