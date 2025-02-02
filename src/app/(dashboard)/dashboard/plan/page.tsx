@@ -1,9 +1,37 @@
+"use client";
+import { createStripeSesstion } from "@/actions/stripeAction";
 import { Button } from "@/components/ui/button";
 import { plans } from "@/config/plans";
+import { toast } from "@/hooks/use-toast";
 import { Check, Sparkle } from "lucide-react";
+import { redirect } from "next/dist/server/api-utils";
+import { initScriptLoader } from "next/script";
 import { features } from "process";
+import { useActionState } from "react";
+
+const initialState = {
+  status: "idle",
+  error: "",
+};
 
 const Plan = () => {
+  const [state, formAction] = useActionState(
+    async (prevState: any, formData: any) => {
+      const result = await createStripeSesstion(prevState, formData);
+      if (result.status === "error") {
+        toast({
+          title: "エラー",
+          description: result.error,
+          variant: "destructive",
+        });
+      } else if (result.status === "success" && result.redirectUrl) {
+        window.location.href = result.redirectUrl;
+      }
+      return result;
+    },
+    initialState
+  );
+
   return (
     <div className="container py-8 mx-auto">
       <div className="mb-12 text-center">
@@ -51,7 +79,8 @@ const Plan = () => {
                     ))}
                   </ul>
                 </div>
-                <form>
+                <form action={formAction}>
+                  <input name="priceId" value={plan.priceId} type="hidden" />
                   <Button
                     className="w-full mt-8"
                     size={"lg"}

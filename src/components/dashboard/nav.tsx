@@ -6,8 +6,10 @@ import { cn } from "@/lib/utils";
 import AuthButton from "../auth/auth-button";
 import Creditdisplay from "./tools/credit-display";
 import NavItems from "./nav-items";
+import { currentUser } from "@clerk/nextjs/server";
 
-const DashboadNav = () => {
+const DashboadNav = async () => {
+  const user = await currentUser();
   return (
     <nav className="grid gap-2 items-startzz1">
       <NavItems />
@@ -17,9 +19,12 @@ const DashboadNav = () => {
       </div>
       <div className="p-4">
         <Creditdisplay />
-        <Button className="w-full mt-4" variant={"premium"}>
-          <Link href={"/dashboard/plan"}>アップグレード</Link>
-        </Button>
+        {/* 条件付きレンダリング */}
+        {user && (
+          <Button className="w-full mt- text-white" variant={"premium"}>
+            <Link href={"/dashboard/plan"}>アップグレード</Link>
+          </Button>
+        )}
       </div>
     </nav>
   );
