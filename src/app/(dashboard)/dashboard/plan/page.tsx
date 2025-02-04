@@ -3,20 +3,22 @@ import { createStripeSesstion } from "@/actions/stripeAction";
 import { Button } from "@/components/ui/button";
 import { plans } from "@/config/plans";
 import { toast } from "@/hooks/use-toast";
+import { StripeState } from "@/types/actions";
 import { Check, Sparkle } from "lucide-react";
 import { redirect } from "next/dist/server/api-utils";
 import { initScriptLoader } from "next/script";
 import { features } from "process";
 import { useActionState } from "react";
 
-const initialState = {
+const initialState: StripeState = {
   status: "idle",
   error: "",
+  redirectUrl: "",
 };
 
 const Plan = () => {
-  const [state, formAction] = useActionState(
-    async (prevState: any, formData: any) => {
+  const [state, formAction, pending] = useActionState(
+    async (prevState: StripeState, formData: FormData) => {
       const result = await createStripeSesstion(prevState, formData);
       if (result.status === "error") {
         toast({

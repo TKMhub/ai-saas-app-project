@@ -1,4 +1,6 @@
 "use server";
+import { prisma } from "@/lib/prisma";
+import { StripeState } from "@/types/actions";
 import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/dist/server/api-utils";
 import Stripe from "stripe";
@@ -7,7 +9,10 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2025-01-27.acacia",
   typescript: true,
 });
-export async function createStripeSesstion(prevState: any, formData: FormData) {
+export async function createStripeSesstion(
+  prevState: StripeState,
+  formData: FormData
+): Promise<StripeState> {
   const priceId = formData.get("priceId") as string;
 
   const user = await currentUser();
@@ -16,8 +21,30 @@ export async function createStripeSesstion(prevState: any, formData: FormData) {
     throw new Error("認証が必要です。");
   }
   try {
+    const dbUser = await prisma.user.findUnique({
+      where: { clerkId: user.id },
+    });
+
+    let customerId = dbUser?.stripeCustomerId;
+    if (!customerId) {
+      const customer = await stripe.customers.create({
+        email: user.emailAddresses[0].emailAddress,
+        metadata: {
+          clerkId: user.id,
+        },
+      });
+
+      await prisma.user.update({
+        where: { clerkId: user.id },
+        data: { stripeCustomerId: customer.id },
+      });
+
+      customerId = customer.id;
+    }
+
     // Create Checkout Sessions from body params.
     const session = await stripe.checkout.sessions.create({
+      customer: customerId,
       line_items: [
         {
           // Provide the exact Price ID (for example, pr_1234) of the product you want to sell
