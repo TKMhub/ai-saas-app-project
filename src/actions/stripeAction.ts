@@ -1,14 +1,9 @@
 "use server";
+import { stripe } from "@/config/stripe";
 import { prisma } from "@/lib/prisma";
 import { StripeState } from "@/types/actions";
 import { currentUser } from "@clerk/nextjs/server";
-import { redirect } from "next/dist/server/api-utils";
-import Stripe from "stripe";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2025-01-27.acacia",
-  typescript: true,
-});
 export async function createStripeSesstion(
   prevState: StripeState,
   formData: FormData
