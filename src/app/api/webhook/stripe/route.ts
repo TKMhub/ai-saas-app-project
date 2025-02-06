@@ -41,13 +41,13 @@ export async function POST(request: Request) {
 
       switch (subscription.items.data[0].price.id) {
         case "prod_RhIAKoVRviPYMs":
-          subscriptionStatus = "FREE";
+          subscriptionStatus = "STARTER";
           break;
         case "prod_RhIB7wyBIKcGRj":
           subscriptionStatus = "PRO";
           break;
         case "prod_RhIBJcQ1pm1QAY":
-          subscriptionStatus = "BASIC";
+          subscriptionStatus = "ENTERPRISE";
           break;
       }
 
@@ -67,13 +67,34 @@ export async function POST(request: Request) {
       });
 
       break;
-    case "payment_method.attached":
-      const paymentMethod = event.data.object;
-      // Then define and call a method to handle the successful attachment of a PaymentMethod.
-      // handlePaymentMethodAttached(paymentMethod);
+    case "customer.subscription.updated":
+      const subscriptionSesoion = event.data.object as Stripe.Subscription;
+
+      if (subscriptionSesoion.status === "active") {
+        let credits = 10;
+        switch (subscriptionSesoion.items.data[0].price.id) {
+          case "prod_RhIAKoVRviPYMs":
+            credits = 50;
+            break;
+          case "prod_RhIB7wyBIKcGRj":
+            credits = 120;
+            break;
+          case "prod_RhIBJcQ1pm1QAY":
+            credits = 300;
+            break;
+        }
+
+        await prisma.user.update({
+          where: { stripeCustomerId: subscriptionSesoion.customer as string },
+          data: {
+            credits: credits,
+          },
+        });
+      }
+
       break;
     default:
-      // Unexpected event type
-      console.log(`Unhandled event type ${event.type}.`);
   }
+
+  return new NextResponse(null, { status: 200 });
 }

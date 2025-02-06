@@ -50,6 +50,9 @@ export async function createStripeSesstion(
       mode: "subscription",
       success_url: `${process.env.BASEURL}/dashboard/?success=true`,
       cancel_url: `${process.env.BASEURL}/dashboard/?canceled=true`,
+      metadata: {
+        clerkId: user.id,
+      },
     });
 
     if (!session.url) {
