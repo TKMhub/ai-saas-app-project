@@ -60,7 +60,9 @@ export async function POST(request: Request) {
             create: {
               stripeSubscriptionId: subscription.id,
               stripePriceId: subscription.items.data[0].price.id,
-              stripeCurrentPeriodEnd: new Date(subscription.current_period_end),
+              stripeCurrentPeriodEnd: new Date(
+                subscription.current_period_end * 1000
+              ),
             },
           },
         },
@@ -88,6 +90,13 @@ export async function POST(request: Request) {
           where: { stripeCustomerId: subscriptionSesoion.customer as string },
           data: {
             credits: credits,
+            subscriptions: {
+              update: {
+                stripeCurrentPeriodEnd: new Date(
+                  subscriptionSesoion.current_period_end * 1000
+                ),
+              },
+            },
           },
         });
       }

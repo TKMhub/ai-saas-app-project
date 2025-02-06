@@ -2,8 +2,26 @@ import PageContainer from "@/components/dashboard/page-container";
 import PageHeader from "@/components/dashboard/page-header";
 import ProfileSection from "@/components/dashboard/settings/profile-section";
 import SubscriptionSettingsForm from "@/components/dashboard/settings/subsctiption-settings-form";
+import { prisma } from "@/lib/prisma";
+import { currentUser } from "@clerk/nextjs/server";
 
-const SettingsPage = () => {
+const SettingsPage = async () => {
+  const user = await currentUser();
+
+  if (!user) {
+    return <div>ログインしてください。</div>;
+  }
+  const dbUser = await prisma.user.findUnique({
+    where: { clerkId: user.id },
+    include: {
+      subscriptions: true,
+    },
+  });
+
+  if (!dbUser) {
+    throw new Error("ユーザーが見つかりませんでした。");
+  }
+
   return (
     <PageContainer>
       <PageHeader
@@ -11,8 +29,12 @@ const SettingsPage = () => {
         description="アカウントの確認とサブスクリプションの設定を管理"
       />
       {/* アカウントの確認 */}
-      <div>
-        <ProfileSection />
+      <div className="max-w-2xl">
+        <ProfileSection
+          email={user.emailAddresses[0].emailAddress}
+          subscriptionStatus={dbUser.subscriptionStatus}
+          nextBillingDate={dbUser?.subscriptions?.stripeCurrentPeriodEnd}
+        />
       </div>
       {/* サブスクリプション管理用のフォームボタン */}
       <div>
