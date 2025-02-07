@@ -37,8 +37,8 @@ const SettingsPage = async () => {
         />
       </div>
       {/* サブスクリプション管理用のフォームボタン */}
-      <div>
-        <SubscriptionSettingsForm />
+      <div className="max-w-2xl">
+        <SubscriptionSettingsForm user={dbUser} />
       </div>
     </PageContainer>
   );

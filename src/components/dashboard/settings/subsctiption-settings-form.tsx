@@ -10,18 +10,22 @@ const SubscriptionSettingsForm = ({ user }: SettingsFormProps) => {
   const handleManageSubscription = async () => {};
 
   return (
-    <div>
-      <div>
+    <div className="grid gap-4 p-4 border-2 rounded-lg">
+      <div className="grid gap-2">
         {user?.subscriptionStatus !== "FREE" ? (
           <>
-            <p>現在のサブスクリプションを管理します。</p>
+            <p className="text-sm text-muted-foreground">
+              現在のサブスクリプションを管理します。
+            </p>
             <Button onClick={handleManageSubscription}>
               サブスクリプション管理
             </Button>
           </>
         ) : (
           <>
-            <p>サブスクリプションに登録していません。</p>
+            <p className="text-sm text-muted-foreground">
+              サブスクリプションに登録していません。
+            </p>
           </>
         )}
       </div>
