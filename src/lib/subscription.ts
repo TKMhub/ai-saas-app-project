@@ -35,8 +35,8 @@ export async function handleSubscriptionCreated(
   return prisma.user.update({
     where: { stripeCustomerId: subscription.customer as string },
     data: {
-      subscriptionStatus: status,
-      credits: credits,
+      subscriptionStatus: subscription.cancel_at_period_end ? "FREE" : status,
+      credits: subscription.cancel_at_period_end ? 5 : credits,
       subscriptions: {
         create: {
           stripeSubscriptionId: subscription.id,
@@ -50,6 +50,44 @@ export async function handleSubscriptionCreated(
   });
 }
 
-export async function handleSubscriptionUpdated() {}
+export async function handleSubscriptionUpdated(
+  subscription: Stripe.Subscription
+) {
+  const { priceId, status, credits } = getPlanDetails(subscription);
 
-export async function handleSubscriptionDeleted() {}
+  return prisma.user.update({
+    where: { stripeCustomerId: subscription.customer as string },
+    data: {
+      subscriptionStatus: "FREE",
+      credits: credits,
+      subscriptions: {
+        update: {
+          stripeSubscriptionId: subscription.id,
+          stripePriceId: "",
+          stripeCurrentPeriodEnd: new Date(
+            subscription.current_period_end * 1000
+          ),
+        },
+      },
+    },
+  });
+}
+
+export async function handleSubscriptionDeleted(
+  subscription: Stripe.Subscription
+) {
+  const { priceId, status, credits } = getPlanDetails(subscription);
+
+  return prisma.user.delete({
+    where: { stripeCustomerId: subscription.customer as string },
+    data: {
+      subscriptionStatus: status,
+      credits: credits,
+      subscriptions: {
+        delete: {
+          stripeSubscriptionId: subscription.id,
+        },
+      },
+    },
+  });
+}
