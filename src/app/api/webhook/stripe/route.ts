@@ -1,10 +1,7 @@
 import { plans } from "@/config/plans";
 import { stripe } from "@/config/stripe";
 import { prisma } from "@/lib/prisma";
-import {
-  handleSubscriptionCreated,
-  handleSubscriptionDeleted,
-} from "@/lib/subscription";
+import { handleSubscriptionCreated } from "@/lib/subscription";
 import { SubscriptionStatus } from "@prisma/client";
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
@@ -41,7 +38,7 @@ export async function POST(request: Request) {
         break;
       }
       case "customer.subscription.deleted": {
-        await handleSubscriptionDeleted(subscription);
+        // await handleSubscriptionDeleted(subscription);
         break;
       }
 

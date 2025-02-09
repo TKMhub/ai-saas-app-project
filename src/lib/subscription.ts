@@ -72,22 +72,3 @@ export async function handleSubscriptionUpdated(
     },
   });
 }
-
-export async function handleSubscriptionDeleted(
-  subscription: Stripe.Subscription
-) {
-  const { priceId, status, credits } = getPlanDetails(subscription);
-
-  return prisma.user.delete({
-    where: { stripeCustomerId: subscription.customer as string },
-    data: {
-      subscriptionStatus: status,
-      credits: credits,
-      subscriptions: {
-        delete: {
-          stripeSubscriptionId: subscription.id,
-        },
-      },
-    },
-  });
-}
