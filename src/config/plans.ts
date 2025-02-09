@@ -1,6 +1,11 @@
 import { Crown, Rocket, Sparkles } from "lucide-react";
 import { features } from "process";
 
+export const STRIPE_PLANS = {
+  STATER: "prod_RhIAKoVRviPYMs",
+  PRO: "prod_RhIB7wyBIKcGRj",
+  ENTERPRISE: "prod_RhIBJcQ1pm1QAY",
+};
 export const plans = [
   {
     name: "Starter",
@@ -9,7 +14,7 @@ export const plans = [
     description: "個人利用に最適なエントリープラン",
     features: ["月50クレジット付与", "基本的な画像生成", "メールサポート"],
     buttonText: "Starterプランを選択",
-    priceId: "prod_RhIAKoVRviPYMs",
+    priceId: STRIPE_PLANS.STATER,
   },
   {
     name: "Pro",
@@ -19,7 +24,7 @@ export const plans = [
     features: ["月100クレジット付与", "優先サポート", "商用利用可能"],
     buttonText: "Proプランを選択",
     popular: true,
-    priceId: "prod_RhIB7wyBIKcGRj",
+    priceId: STRIPE_PLANS.PRO,
   },
   {
     name: "Enterprise",
@@ -28,6 +33,6 @@ export const plans = [
     description: "ビジネス向けの完全なソリューションプラン",
     features: ["月300クレジット付与", "24時間優先サポート", "カスタマイズ可能"],
     buttonText: "Enterpriseプランを選択",
-    priceId: "prod_RhIBJcQ1pm1QAY",
+    priceId: STRIPE_PLANS.ENTERPRISE,
   },
 ];

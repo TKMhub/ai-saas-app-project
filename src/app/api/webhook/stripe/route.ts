@@ -1,6 +1,10 @@
 import { plans } from "@/config/plans";
 import { stripe } from "@/config/stripe";
 import { prisma } from "@/lib/prisma";
+import {
+  handleSubscriptionCreated,
+  handleSubscriptionDeleted,
+} from "@/lib/subscription";
 import { SubscriptionStatus } from "@prisma/client";
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
@@ -26,15 +30,18 @@ export async function POST(request: Request) {
     if (!event) {
       return new NextResponse("Webhook Event Error", { status: 500 });
     }
+
+    const subscription = event.data.object as Stripe.Subscription;
+
     // Handle the event
     switch (event.type) {
       //リファクタリング後
       case "customer.subscription.created": {
-        await handleSubscriptionCreated();
+        await handleSubscriptionCreated(subscription);
         break;
       }
       case "customer.subscription.deleted": {
-        await handleSubscriptionDeleted();
+        await handleSubscriptionDeleted(subscription);
         break;
       }
 
