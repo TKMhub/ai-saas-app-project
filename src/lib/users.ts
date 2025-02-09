@@ -37,8 +37,20 @@ export async function updateUser(clerkId: string, email: string) {
 
 export async function deleteUser(clerkId: string) {
   try {
-    const user = await prisma.user.delete({
-      where: { clerkId: clerkId },
+    const user = await prisma.$transaction(async (tx) => {
+      await tx.subscription.deleteMany({
+        where: {
+          user: {
+            clerkId: clerkId,
+          },
+        },
+      });
+
+      const user = await tx.user.delete({
+        where: { clerkId: clerkId },
+      });
+
+      return user;
     });
 
     return NextResponse.json({ user }, { status: 200 });
