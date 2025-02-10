@@ -9,6 +9,7 @@ export async function createUser(clerkId: string, email: string) {
         email: email,
         credits: 5,
         subscriptionStatus: "FREE",
+        subscriptionId: "",
       },
     });
 
